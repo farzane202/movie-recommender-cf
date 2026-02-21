@@ -7,34 +7,28 @@ from sklearn.model_selection import train_test_split
 
 def run_svd_model(ratings):
 
-    # ---------------------------
-    # 1️⃣ Train / Test Split
-    # ---------------------------
+   
     train_data, test_data = train_test_split(
         ratings,
         test_size=0.2,
         random_state=42
     )
 
-    # ---------------------------
-    # 2️⃣ Create User-Item Matrix
-    # ---------------------------
+  
     user_item_matrix = train_data.pivot(
         index="userId",
         columns="movieId",
         values="rating"
     )
 
-    # ---------------------------
-    # 3️⃣ Mean Centering
-    # ---------------------------
+   
     user_means = user_item_matrix.mean(axis=1)
 
     user_item_centered = user_item_matrix.sub(user_means, axis=0)
     user_item_centered = user_item_centered.fillna(0)
 
     # ---------------------------
-    # 4️⃣ Apply SVD
+    #  Apply SVD
     # ---------------------------
     svd = TruncatedSVD(
         n_components=50,
@@ -54,7 +48,7 @@ def run_svd_model(ratings):
     reconstructed_df = reconstructed_df.add(user_means, axis=0)
 
     # ---------------------------
-    # 5️⃣ RMSE Evaluation
+    # RMSE Evaluation
     # ---------------------------
     predictions = []
     actuals = []
